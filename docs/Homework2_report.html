@@ -386,7 +386,7 @@ slope</code></pre>
 <pre><code>##       age 
 ## 0.1711623</code></pre>
 <pre class="r"><code># Correlation between the two variables
-cor(dataset$fev1, dataset$age, use = &quot;complete.obs&quot;)</code></pre>
+cor(dataset$fev1, dataset$age, use = &#39;complete.obs&#39;)</code></pre>
 <pre><code>## [1] 0.8059696</code></pre>
 <pre class="r"><code>## Write your function here
 fev1_age &lt;- function(dataset) {
@@ -411,7 +411,16 @@ fev1_age(dataset)</code></pre>
 predictor.</p>
 <p>How much does FEV1 change for a 1-year increase in the child’s
 age?</p>
-<pre class="r"><code>## Add your code here</code></pre>
+<pre class="r"><code>## Add your code here
+model &lt;- lm(fev1 ~ age, data = dataset)
+model</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = fev1 ~ age, data = dataset)
+## 
+## Coefficients:
+## (Intercept)          age  
+##   -0.001199     0.171162</code></pre>
 <p>Write your data analysis statement interpreting the regression model
 here:</p>
 </div>

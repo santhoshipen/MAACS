@@ -8,7 +8,6 @@ output:
 
 ## Santhoshi Penmetsa
 
-
 ### Setup
 
 Read in the data with `read_csv()` and store the data as an R object named `dataset`. Check the data to make sure all of the expected observations and variables are there.
@@ -127,7 +126,6 @@ For statements involving plots, instead of returning `TRUE` or `FALSE`, you func
 ```
 
 Execute each of your function and show that the produce the expected output.
-
 
 
 ## Part 5
