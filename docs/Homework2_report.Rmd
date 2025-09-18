@@ -15,6 +15,7 @@ Read in the data with `read_csv()` and store the data as an R object named `data
 
 ```{r}
 ## Load the data and any necessary packages here.
+library(ggplot2)
 dataset = read.csv('maacs.csv.gz')
 
 ```
@@ -82,9 +83,12 @@ Develop **three** supporting premises derived from the data that support the sta
 
 NOTE: At least one supporting premise should use a plot.
 
+Three supporing code statements or plots that show that fev1 increases as age increases
+
 ```{r}
 ## Add your code here
-
+ggplot(dataset, aes(x = fev1, y = age)) +
+  geom_point()
 ```
 
 
