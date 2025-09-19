@@ -36,11 +36,6 @@ NOTE: For this part, do not use any plots.
 # Linear regression model
 model <- lm(fev1 ~ age, data = dataset)
 slope <- coef(model)["age"]
-slope
-
-# Correlation between the two variables
-cor(dataset$fev1, dataset$age, use = 'complete.obs')
-
 
 ## Write your function here
 fev1_age <- function(dataset) {
@@ -75,7 +70,7 @@ model
 
 Write your data analysis statement interpreting the regression model here:
 
-
+**For every 1-year increase in a child’s age, their predicted FEV1 level increases by about 0.171 units.**
 
 ## Part 3
 
@@ -85,21 +80,37 @@ NOTE: At least one supporting premise should use a plot.
 
 Three supporing code statements or plots that show that fev1 increases as age increases
 
-```{r}
-## Add your code here
-ggplot(dataset, aes(x = fev1, y = age)) +
-  geom_point()
+```{r warning = FALSE}
+# Premise 1  
+
+# Correlation coefficient between age and fev1
+cor(dataset$fev1, dataset$age, use = 'complete.obs')
+
+# Premise 2
+
+# Scatterplot of fev1 and age 
+ggplot(dataset, aes(x = age, y = fev1)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", se = TRUE, color = "maroon") +
+  labs(title = "FEV1 vs Age", 
+       x = "Age (years)", 
+       y = "FEV1")
+
+# Premise 3 
+
+# Confidence Interval 
+fev1_model <- lm(fev1 ~ age, data = dataset)
+confint(fev1_model)
 ```
 
 
 Write the three supporting premise statements here:
 
-1. 
+1. The correlation coefficient between age and FEV1 is 0.806, indicating that FEV1 levels tend to increase as the children keep getting older
 
-2. 
+2. The scatterplot of FEV1 vs. age, with a fitted regression line, shows a clear upward trend, providing visual evidence that FEV1 levels rise as age increases 
 
-3. 
-
+3. The estimated regression slope for age is 0.17, with a 95% confidence interval of (0.15, 0.19). Because the entire interval lies above zero, we have strong statistical evidence that FEV1 increases with age
 
 ## Part 4
 
@@ -115,18 +126,68 @@ For statements involving plots, instead of returning `TRUE` or `FALSE`, you func
 ```{r}
 ## Function for supporting premise statement 1
 
+premise_1 <- function(dataset){
+  fev1_model <- lm(fev1 ~ age, data = dataset)
+  conf_interval <- confint(fev1_model)
+  coef_val <- cor(dataset$fev1, dataset$age, use = 'complete.obs')
+  if (coef_val > 0) {
+    result <- TRUE
+  } else {
+    result <- FALSE
+  }
+  
+  return(result)
+}
+
+premise_1(dataset)
 ```
 
 
-```{r}
+```{r warning = FALSE}
 ## Function for supporting premise statement 2
 
+premise_2 <- function(dataset) {
+  p1 <- ggplot(dataset, aes(x = age, y = fev1)) +
+    geom_point(alpha = 0.5) +
+    geom_smooth(method = "lm", se = TRUE, color = "hotpink") +
+    labs(title = "Observed: FEV1 vs Age",
+         x = "Age (years)",
+         y = "FEV1")
+  print(p1)
+  
+  set.seed(123)
+  age_sim <- seq(min(dataset$age, na.rm = TRUE),
+                 max(dataset$age, na.rm = TRUE),
+                 length.out = 100)
+  fev1_sim <- 0.2 * age_sim + rnorm(100, mean = 0, sd = 0.5)  # slope > 0
+  sim_data <- data.frame(age = age_sim, fev1 = fev1_sim)
+  
+  p2 <- ggplot(sim_data, aes(x = age, y = fev1)) +
+    geom_point(alpha = 0.5) +
+    geom_smooth(method = "lm", se = TRUE, color = "skyblue") +
+    labs(title = "Hypothetical: Positive Trend",
+         x = "Age (years)",
+         y = "FEV1")
+  print(p2)
+}
+
+premise_2(dataset)
 ```
 
 
 ```{r}
 ## Function for supporting premise statement 3
 
+premise_3 <- function(dataset) {
+  fev1_model <- lm(fev1 ~ age, data = dataset)
+  conf_interval <- confint(fev1_model)
+  lower <- conf_interval["age", 1]
+  upper <- conf_interval["age", 2]
+  result <- (lower > 0)
+  return(result)
+}
+
+premise_3(dataset)
 ```
 
 Execute each of your function and show that the produce the expected output.
